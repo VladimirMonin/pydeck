@@ -5,7 +5,7 @@ USERS_COUNT = 10
 
 def about(request):
     context = {'users_count': USERS_COUNT}
-    return render(request, "about.html")
+    return render(request, "about.html", context)
 
 
 def blog_catalog(request):
