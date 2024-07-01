@@ -4,7 +4,8 @@ USERS_COUNT = 10
 
 
 def about(request):
-    return HttpResponse(f"<h1>О блоге</h1><p>Пользователей: {USERS_COUNT}</p>")
+    context = {'users_count': USERS_COUNT}
+    return render(request, "about.html")
 
 
 def blog_catalog(request):

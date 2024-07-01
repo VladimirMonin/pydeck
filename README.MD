@@ -8,3 +8,13 @@ django-admin startproject <project_name> .
 python manage.py startapp <app_name> 
 ```
 
+Подключение `templates` из корня проекта в `settings.py`
+```python
+TEMPLATES = [
+    {
+        ...
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        ...
+    },
+]
+```
