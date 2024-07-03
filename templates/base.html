@@ -29,9 +29,10 @@ scripts - дополнительные скрипты (Значение по у�
     />
     {% comment %} Подключил стили для футера {% endcomment %}
     <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/post_detail.css' %}" />
     {% comment %} Стили для библиотеки highlight.js {% endcomment %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/tomorrow-night-bright.min.css">
-  
+    {% block head %}{% endblock %}
   </head>
   <body>
     <header>

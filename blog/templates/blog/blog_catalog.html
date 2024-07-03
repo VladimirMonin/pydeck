@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/blog_catalog.css' %}" />
+{% endblock  %}
 {% block title %}Блог{% endblock %}
 {% block content %}
 <h1 class="mt-3">Это блог!</h1>
