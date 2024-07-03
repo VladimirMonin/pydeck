@@ -95,21 +95,75 @@ posts = [
 
 
 def about(request):
+    """
+    Вьюшка для страницы "О проекте"
+    """
     context = {
         "users_count": USERS_COUNT,
         "menu": menu,
         "page_alias": "about",
     }
+
+
     return render(request, "about.html", context)
 
 
 def blog_catalog(request):
-    context = {
-        "menu": menu,
-        "posts": posts,
-        "page_alias": "blog_catalog",
-    }
-    return render(request, "blog/blog_catalog.html", context)
+    """
+    Вьюшка для страницы "Блог" с каталогом постов.
+    Обрабатываем поисковую форму, которая обрабатывается методом GET
+    И пробуем получить от туда ключи:
+        search
+        searchInTitle
+        searchInText
+        searchInTags
+    """
+    
+    if request.method == "GET":
+        search = request.GET.get("search")
+        search_in_title = request.GET.get("searchInTitle")
+        search_in_text = request.GET.get("searchInText")
+        search_in_tags = request.GET.get("searchInTags")
+        posts_filtered = []
+        
+        if search:
+            
+            for post in posts:
+                
+                # Если чекбоксы выключены, ищем только по тексту
+                # Если включен title, ищем по названию
+                # Если включен text, ищем по тексту
+                # Если включен tags, ищем по тегам
+                
+                # Поиск по умолчанию
+                if not search_in_title and not search_in_text and not search_in_tags:
+                    if search.lower() in post["text"].lower():
+                        posts_filtered.append(post)
+
+                # Поиск по названию
+                if search_in_title:
+                    if search.lower() in post["title"].lower():
+                        posts_filtered.append(post)
+
+                # Поиск по тексту
+                if search_in_text:
+                    if search.lower() in post["text"].lower():
+                        posts_filtered.append(post)
+                
+                # Поиск по тегам
+                if search_in_tags:
+                    for tag in post["tags"]:
+                        if search.lower() in tag.lower():
+                            posts_filtered.append(post)
+
+                
+    
+        context = {
+            "menu": menu,
+            "posts": posts_filtered if posts_filtered else posts,
+            "page_alias": "blog_catalog",
+        }
+        return render(request, "blog/blog_catalog.html", context)
 
 
 def index(request):
