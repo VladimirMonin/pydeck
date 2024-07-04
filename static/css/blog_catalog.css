@@ -2,8 +2,8 @@
 Увеличение размера на 5% при наведении на карточку. */
 
 div.card:hover {
-    transform: scale(1.02);
-    transition: transform 0.2s;
+    transform: scale(1.01);
+    transition: transform 1.5s;
     /* Слабая тень */
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
