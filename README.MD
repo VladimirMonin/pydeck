@@ -39,3 +39,10 @@ python manage.py makemigrations
 ```bash
 python manage.py migrate
 ```
+
+## Установили Shell plus
+
+```bash
+pip install django-extensions
+```
+
