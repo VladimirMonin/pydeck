@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse
+from django.http import HttpRequest
 
 USERS_COUNT = 10
 
@@ -277,7 +278,13 @@ def blog_catalog(request):
         return render(request, "blog/blog_catalog.html", context)
 
 
-def index(request):
+def index(request: HttpRequest):
+    """
+    Функция - представление для главной страницы
+    Принимает объект запроса HttpRequest
+    Вносит контекст дополнительные данные.
+    """
+
     context = {
         "users_count": USERS_COUNT,
         "menu": menu,
@@ -287,7 +294,12 @@ def index(request):
     return render(request, "index.html", context)
 
 
-def post_detail(request, slug):
+def post_detail(request: HttpRequest, slug: str):
+    """
+    Функция - представление для отдельной статьи
+    Принимает объект запроса HttpRequest и slug статьи
+    Отображает статью с соответствующим slug
+    """
     post = next((p for p in posts if p["slug"] == slug), None)
     if post is None:
         return HttpResponse("Статья не найдена", status=404)

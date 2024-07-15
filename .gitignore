@@ -2,3 +2,4 @@
 .venv
 db.sqlite3
 __pycache__*
+.vscode/PythonImportHelper-v2-Completion.json
