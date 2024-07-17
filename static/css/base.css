@@ -16,11 +16,11 @@ span.tag {
 /* Стили для тегов при наведении плавно окрашиваются в темный цвет фона */
 span.tag:hover {
   background-color: #343a40; /* Темный цвет фона */
-  transition: background-color 1.5s; /* Плавное изменение цвета фона */
+  transition: background-color 1.9s; /* Плавное изменение цвета фона */
 }
 
 /* Размер иконок и цвет */
-i.bi {
+span > i.bi {
   font-size: 1.5rem;
   color: #343a40;
 }
