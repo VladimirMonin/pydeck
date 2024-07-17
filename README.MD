@@ -185,3 +185,30 @@ python manage.py createsuperuser
 ```
 
 У этого пользователя будут максимальные права в системе.
+
+Добудем пользователя с username `admin`
+Создадим пост от его имени
+
+```python
+
+user = User.objects.get(username='admin')
+
+Post.objects.create(title='Второй пост', text='Текст второго поста', author=user, tags=['второй', 'пост'])
+
+```
+
+Есть проблема со слагификацицией кириллицы. Для того чтобы это исправить, надо установить библиотеку `unidecode`
+
+```bash
+pip install unidecode
+```
+
+Импортировать её в модели.
+
+```python
+from unidecode import unidecode
+
+# Использовать в слагификации
+self.slug = slugify(unidecode(self.title))
+```
+
