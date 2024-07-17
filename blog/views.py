@@ -60,7 +60,6 @@ def index(request: HttpRequest):
     context = {
         "users_count": USERS_COUNT,
         "menu": menu,
-        "posts": posts,
         "page_alias": "main",
     }
     return render(request, "index.html", context)
