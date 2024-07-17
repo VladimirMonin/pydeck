@@ -28,7 +28,7 @@ class Post(models.Model):
         """
         Строковое представление модели
         """
-        return self.title
+        return f'{self.title}: {self.slug}'
 
     def get_absolute_url(self):
         """

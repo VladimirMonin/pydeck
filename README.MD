@@ -212,3 +212,26 @@ from unidecode import unidecode
 self.slug = slugify(unidecode(self.title))
 ```
 
+### Регистрация моделей в админке.
+
+Базовую регистрацию можно сделать 2 способами:
+
+1. **Создать файл `admin.py` в папке приложения и зарегистрировать модель:**
+   ```python
+   from django.contrib import admin
+   from .models import Post
+
+   admin.site.register(Post)
+   ```
+
+2. **Создать класс PostAdmin в файле `admin.py` и зарегистрировать модель:**
+   ```python
+   from django.contrib import admin
+   from .models import Post
+
+   @admin.register(Post)
+   class PostAdmin(admin.ModelAdmin):
+       list_display = ('title', 'author', 'published_date')
+       list_filter = ('author', 'published_date')
+       search_fields = ('title', 'text')
+   ```
