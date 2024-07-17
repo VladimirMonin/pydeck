@@ -34,4 +34,4 @@ class Post(models.Model):
         """
         Метод для получения абсолютного URL поста
         """
-        return f'/post/{self.slug}/'
+        return f'/blog/{self.slug}/'
