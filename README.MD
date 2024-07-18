@@ -244,3 +244,63 @@ self.slug = slugify(unidecode(self.title))
 
 Коммит:
 **models: запустили рендер постов из модели Post**
+
+
+## CKEditor
+
+Для того чтобы добавить CKEditor в ваше Django-приложение и использовать его только в админке для редактирования и добавления постов, выполните следующие шаги:
+
+### 1. Установка необходимых библиотек
+
+Используйте `pip` для установки `django-ckeditor`:
+
+```sh
+pip install django-ckeditor
+```
+
+### 2. Настройки Django
+
+#### a. Добавьте `ckeditor` и `ckeditor_uploader` в `INSTALLED_APPS` в вашем `settings.py`:
+
+```python
+INSTALLED_APPS = [
+    ...
+    'ckeditor',
+    'ckeditor_uploader',
+    ...
+]
+```
+
+#### b. Настройте пути для загрузки файлов CKEditor:
+
+Добавьте следующие строки в `settings.py`:
+
+```python
+CKEDITOR_UPLOAD_PATH = "uploads/"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+```
+
+Если этих папок нет, создайте их в корне проекта.
+
+### 3. Конфигурация URL
+
+#### a. В основном файле `urls.py` вашего проекта добавьте путь для CKEditor:
+
+```python
+from django.conf import settings
+from django.conf.urls.static import static
+from django.urls import path, include
+
+urlpatterns = [
+    ...
+    path('ckeditor/', include('ckeditor_uploader.urls')),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+Добавили в пути `ckeditor/` и подключили `ckeditor_uploader.urls` для загрузки файлов.
+Конструкция `if settings.DEBUG:` добавляет путь к медиафайлам только в режиме отладки, в боевом режиме это будет делать веб-сервер.
+
