@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mdeditor',
     'django_extensions',
     'blog',
 ]
@@ -117,3 +118,30 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MDEDITOR_CONFIGS = {
+    'default': {
+        'width': '90%',
+        'height': 500,
+        'toolbar': [
+            'undo', 'redo', '|', 'bold', 'del', 'italic', 'quote', 'ucwords', 'uppercase', 'lowercase', '|',
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6', '|', 'list-ul', 'list-ol', 'hr', '|', 'link', 'reference-link', 'image', 'code', 'preformatted-text', 'html', 'table', 'datetime', 'pagebreak', '|', 'goto-line', 'watch', 'preview', 'fullscreen', 'clear', 'search', '|',
+        ],
+        'upload_image_formats': ['jpg', 'jpeg', 'gif', 'png', 'bmp', 'webp'],
+        'image_folder': 'editor_images',
+        'theme': 'default',
+        'preview_theme': 'default',
+        'editor_theme': 'default',
+        'toolbar_autofixed': False,
+        'search_replace': True,
+        'emoji': True,
+        'tex': True,
+        'flow_chart': True,
+        'sequence': True,
+        'watch': True,
+        'lineWrapping': False,
+        'lineNumbers': True,
+        'language': 'en',  # если есть русификация, можно указать 'ru'
+    }
+}
