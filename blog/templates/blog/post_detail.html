@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% comment %} blog/templates/blog/post_detail.html {% endcomment %}
-{% load markdown_to_html %}
+
 {% load static %}
 {% block title %}{{ post.title }}{% endblock %}
 {% block head %}<link rel="stylesheet" href="{% static 'css/post_detail.css' %}" />{% endblock  %}
@@ -15,8 +15,8 @@
     <div class="col-lg-10">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">{% markdown_to_html post.title %}</h5>
-                <p class="card-text">{% markdown_to_html post.text|safe %}</p>
+                <h5 class="card-title">{{  post.title }}</h5>
+                <p class="card-text">{{  post.text|safe }}</p>
                 <p class="card-text"><strong>Автор:</strong> {{ post.author|default:"Автор не известен" }}</p>
                 <p class="card-text"><strong>Дата публикации:</strong> {{ post.published_date }}</p>
                 <div class="d-flex justify-content-between align-items-center mb-2">

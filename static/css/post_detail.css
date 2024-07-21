@@ -4,6 +4,12 @@ pre {
 }
 
 /* Стили меню */
+/* Для блока pre делаем тень */
+pre {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Стили меню */
 #toc {
   position: sticky;
   top: 20px;
@@ -19,14 +25,16 @@ pre {
 
 #toc a {
   color: #343a40;
+  display: block; /* Ensure anchor links take the full width */
+  padding: 5px; /* Add padding to the anchor links */
 }
 
 #toc a:hover {
   text-decoration: underline;
   background-color: #f1f1f1;
+  border-radius: 0.25rem; /* Add border-radius to keep consistency */
 }
 
-/* Последняя кликнутая */
 #toc a:focus {
   background-color: #84898f;
   border-radius: 0.25rem;
