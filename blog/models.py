@@ -2,13 +2,14 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 from unidecode import unidecode
+from markdownx.models import MarkdownxField
 
 class Post(models.Model):
     """
     Модель поста
     """
     title = models.CharField(max_length=200)
-    text = models.TextField()
+    text = MarkdownxField()
     slug = models.SlugField(unique=True)
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     tags = models.JSONField(null=True, blank=True, default=list)

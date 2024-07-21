@@ -4,3 +4,5 @@ db.sqlite3
 __pycache__*
 .vscode/PythonImportHelper-v2-Completion.json
 media/
+pydeck.session.sql
+.vscode/settings.json

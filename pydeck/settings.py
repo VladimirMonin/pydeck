@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'markdownx',
     'django_extensions',
     'blog',
 ]
@@ -111,6 +112,10 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
        os.path.join(BASE_DIR, 'static'),  # Путь к статике в корневой директории
    ]
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type
