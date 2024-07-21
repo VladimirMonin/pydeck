@@ -244,3 +244,14 @@ self.slug = slugify(unidecode(self.title))
 
 Коммит:
 **models: запустили рендер постов из модели Post**
+
+## Ветка markdownx
+
+Установил django-markdownx-4.0.7
+
+```bash
+pip install django-markdownx
+```
+
+Еще одна потенциальная библиотека для создания постов из markdown
+
