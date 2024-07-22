@@ -436,7 +436,15 @@ python manage.py migrate
    # TODO - Проблема со слагификатором даже с unidecode в теге 12 проигнорировал русские буквы вообще создав слаг web 
    ```
 
-### Постов
+Добыть тег по имени
+
+```python
+tag = Tag.objects.get(name='Python')
+all_tags = Tag.objects.all()
+
+```
+
+### Добавление постов
 
 ```python
 # Автор - первая запись в таблице пользователей
@@ -450,11 +458,30 @@ post1 = Post.objects.create(
     author=admin,
     category=category1
 )
-post1.tags.add(tag10.id, tag11.id, tag12.id)
+post1.tags.add(tag1.id, tag2.id, tag3.id)
 
 post2 = Post.objects.create(
     title='Введение в Django',
     text='Начало работы с Django.',
-    author=user1,
+    author=admin,
     category=category2
 )
+
+post2.tags.add(tag2.id)
+```
+
+Добудим тег поста 2 и потом все посты с этим тегом.
+
+```python
+post = Post.objects.get(title='Введение в Django')
+tags = post.tags.all()
+tag1 = tags[0]
+
+posts = tag1.posts.all()
+```
+
+Запуск shell_plus с отображением SQL запросов
+
+```bash
+python manage.py shell_plus --print-sql
+```
