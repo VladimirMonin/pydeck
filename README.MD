@@ -399,3 +399,62 @@ python manage.py migrate
 ```
 
 После чего, вы получите новые таблицы в базе данных.
+
+### Практика с моделями
+
+1. **Запустите Django Shell Plus**
+
+   ```bash
+   python manage.py shell_plus
+   ```
+
+2. **Создайте категории**
+
+   ```python
+   # Создание категорий
+   category1 = Category.objects.create(name='Программирование', slug='programmyrovanie')
+   category2 = Category.objects.create(name='Веб-разработка', slug='web-razrabotka')
+   category3 = Category.objects.create(name='Базы данных', slug='bazy_dannykh')
+   ```
+
+3. **Создайте теги**
+
+   ```python
+   # Создание тегов
+   tag1 = Tag.objects.create(name='Python')
+   tag2 = Tag.objects.create(name='Django')
+   tag3 = Tag.objects.create(name='Flask')
+   tag4 = Tag.objects.create(name='SQL', 
+   tag5 = Tag.objects.create(name='SQLite', 
+   tag6 = Tag.objects.create(name='PostgreSQL', 
+   tag7 = Tag.objects.create(name='JavaScript', 
+   tag8 = Tag.objects.create(name='HTML', 
+   tag9 = Tag.objects.create(name='CSS', 
+   tag10 = Tag.objects.create(name='Bootstrap 5')
+   tag11 = Tag.objects.create(name='Верстка')
+   tag12 = Tag.objects.create(name='Разработка web приложений')
+   # TODO - Проблема со слагификатором даже с unidecode в теге 12 проигнорировал русские буквы вообще создав слаг web 
+   ```
+
+### Постов
+
+```python
+# Автор - первая запись в таблице пользователей
+user_model = get_user_model()
+admin = user_model.objects.first()
+# author = User.objects.get(username='admin')
+
+post1 = Post.objects.create(
+    title='Основы Python',
+    text='Изучаем основы Python.',
+    author=admin,
+    category=category1
+)
+post1.tags.add(tag10.id, tag11.id, tag12.id)
+
+post2 = Post.objects.create(
+    title='Введение в Django',
+    text='Начало работы с Django.',
+    author=user1,
+    category=category2
+)

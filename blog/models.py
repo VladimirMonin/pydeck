@@ -13,6 +13,7 @@ class Post(models.Model):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     # related_name - имя обратной связи. Это имя будет использоваться для обращения к связанным объектам
     # Например, если мы захотим получить все посты, связанные с тегом, мы можем использовать выражение tag.posts.all()
+    category = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='posts', null=True, default=None)
     tags = models.ManyToManyField('Tag', related_name='posts') 
     published_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
@@ -52,7 +53,7 @@ class Category(models.Model):
         Переопределение метода save для автоматической генерации slug
         """
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(unidecode(self.name))
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
@@ -81,7 +82,7 @@ class Tag(models.Model):
         и приведения имени тега к нижнему регистру
         """
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(unidecode(self.name))
         self.name = self.name.lower().replace(' ', '_')
         super().save(*args, **kwargs)
 
@@ -118,4 +119,3 @@ class Comment(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='unchecked')
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
-    
