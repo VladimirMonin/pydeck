@@ -601,27 +601,30 @@ post3.tags.add(tag4.id, tag5.id)
        category=category3
    )
    post6.tags.add(tag6)
+   
+   post1, post2, post3, post4, post5, post6 = Post.objects.all()
+   
    ```
 
 #### Выполнение дополнительных операций
 
-1. **Получите все комментарии одного пользователя**
+1. **Посмотреть все теги поста**
 
    ```python
-   comments_user1 = Comment.objects.filter(author='Иван Иванов')
+   post1 = Post.objects.get(pk=1)
+   post1_tags = post1.tags.all()
    ```
 
-2. **Подсчитайте количество комментариев пользователя**
+2. **Количество постов по тегу с pk1**
 
    ```python
-   count_comments_user1 = comments_user1.count()
+   post_count_tag1 = Tag.objects.get(pk=1).posts.count()
    ```
 
-3. **Найдите все теги всех постов, под которыми пользователь оставил комментарии**
+3. **Посты где количество тегов больше 1**
 
    ```python
-   posts_with_comments_user1 = Post.objects.filter(comments__author='Иван Иванов').distinct()
-   tags_with_comments_user1 = Tag.objects.filter(post__in=posts_with_comments_user1).distinct()
+   posts_with_multiple_tags = Post.objects.annotate(num_tags=models.Count('tags')).filter(num_tags__gt=1)
    ```
 
 ### Упражнения для практики с менеджером объектов в Django
@@ -641,6 +644,9 @@ post3.tags.add(tag4.id, tag5.id)
    all_posts_user1 = Post.objects.filter(author=user1)
    for post in all_posts_user1:
        print(post)
+
+    # Аналогично с использованием username вместо объекта пользователя
+    all_posts_user1 = Post.objects.filter(author__username='user1')
    ```
 
 3. **Получить все посты пользователя `user1` в обратном порядке**
@@ -650,6 +656,9 @@ post3.tags.add(tag4.id, tag5.id)
    all_posts_user1_desc = Post.objects.filter(author=user1).order_by('-published_date')
    for post in all_posts_user1_desc:
        print(post)
+
+    # Аналогично с использованием username вместо объекта пользователя
+    all_posts_user1 = Post.objects.filter(author__username='user1').order_by('-published_date')
    ```
 
 4. **Получить все посты по тегу `Django`**
