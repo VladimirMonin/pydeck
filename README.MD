@@ -879,3 +879,15 @@ recent_posts_in_web_dev = Post.objects.filter(
     Q(published_date__gt=datetime(2023, 1, 1))
 )
 ```
+
+### Тестируем F-объекты save() всего и по определенному полю
+
+```python
+post = Post.objects.get(pk=1)
+post.views = F('views') + 1
+post.save()
+
+post = Post.objects.get(pk=1)
+post.views += 1
+post.save(update_fields=['views'])
+```

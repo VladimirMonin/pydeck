@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from .models import Post
 from django.shortcuts import get_object_or_404
+from django.db.models import F
 
 USERS_COUNT = 10
 
@@ -41,7 +42,8 @@ def blog_catalog(request):
     if request.method == "GET":
 
         posts = Post.objects.all()
-        
+        # TODO: Добавить обработку поисковой формы
+
         context = {
             "menu": menu,
             "posts": posts,
@@ -65,15 +67,7 @@ def index(request: HttpRequest):
     return render(request, "index.html", context)
 
 
-def post_detail(request: HttpRequest, slug: str):
-    """
-    Функция - представление для отдельной статьи
-    Принимает объект запроса HttpRequest и slug статьи
-    Отображает статью с соответствующим slug
-    """
-#    post = Post.objects.get(slug=slug)
-    # post = Post.objects.filter(slug=slug).first()
-    # get_object_or_404- метод, который возвращает объект или 404
+def post_detail(request, slug):
     post: Post = get_object_or_404(Post, slug=slug)
 
     context = {
@@ -81,8 +75,21 @@ def post_detail(request: HttpRequest, slug: str):
         "post": post,
         "page_alias": "blog_catalog",
     }
-    return render(request, "blog/post_detail.html", context)
-
+    
+    # Проверяем, есть ли в сессии информация о просмотренных постах
+    if 'viewed_posts' not in request.session:
+        request.session['viewed_posts'] = ['osnovy-python', 'osnovy-django', 'osnovy-django-2']
+    
+    # Если пост еще не был просмотрен, увеличиваем количество просмотров
+    
+    if slug not in request.session['viewed_posts']:
+        post.views = F('views') + 1
+        post.save(update_fields=['views'])
+        request.session['viewed_posts'].append(slug)  # Добавляем пост в список просмотренных
+        request.session.modified = True  # Указываем, что сессия была изменена для сохранения изменений
+    
+    # Отображаем пост
+    return render(request, 'blog/post_detail.html', context)
 
 
 def category_detail(request: HttpRequest, slug: str):
