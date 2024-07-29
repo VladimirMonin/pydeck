@@ -665,7 +665,9 @@ post3.tags.add(tag4.id, tag5.id)
    Этот запрос возвращает все посты, которые имеют тег `Django`. Связь между постами и тегами осуществляется через поле `tags`.
 
    ```python
-   django_posts = Post.objects.filter(tags__name='Django')
+   django_posts = Post.objects.filter(tags__name='django')
+   # Тоже самое, но через лукап icontains
+    django_posts = Post.objects.filter(tags__name__icontains='django')
    for post in django_posts:
        print(post)
    ```
@@ -779,9 +781,9 @@ post3.tags.add(tag4.id, tag5.id)
     Этот запрос возвращает все посты, автором которых является `user2` и у которых более двух тегов. Используется метод `annotate` и фильтр по количеству тегов.
 
     ```python
-    user2_posts_with_multiple_tags = Post.objects.filter(author=user2).annotate(num_tags=Count('tags')).filter(num_tags__gt=2)
+    user2_posts_with_multiple_tags = Post.objects.filter(author=user2).annotate(num_tags=Count('tags')).filter(num_tags__gt=1)
     for post in user2_posts_with_multiple_tags:
-        print(post)
+        print(post.num_tags)
     ```
 
 17. **Получить все посты, отсортированные по дате публикации в порядке убывания**
@@ -822,3 +824,58 @@ post3.tags.add(tag4.id, tag5.id)
     for category in categories_with_posts:
         print(category)
     ```
+
+## Lesson 59
+
+### И / ИЛИ без Q-объекта
+
+Оператор И у нас может быть заменен на запятую в методе filter. Оператор ИЛИ заменяется на вертикальную черту.
+
+```python
+users = User.objects.all() 
+user1 = users[0] 
+category1 = Category.objects.filter(name__icontains="Программирование").first()
+Post.objects.filter(author=user1, category=category1)
+Post.objects.filter(author__exact=user1, category__exact=category1)
+```
+Фильтр всегда возвращает QuerySet, даже если в нем нет данных. Нам надо было использовать метод first() для получения первого объекта из QuerySet или срез для категории.
+
+
+
+### F-объект
+`F-объект` позволяет сравнивать значения полей модели между собой. Например, мы можем сравнить значения двух полей модели и выполнить фильтрацию на основе этого сравнения, без дополнительных запросов к базе данных.
+
+Или увеличить счетчик просмотров поста на 1.
+
+```python
+from django.db.models import F
+# Предположим, что post - это объект модели Post, который мы хотим обновить
+post.views = F('views') + 1
+post.save()
+
+###### Без F объекта
+post.views += 1
+post.save()
+```
+
+### Q-объект
+`Q-объект` позволяет создавать сложные запросы с использованием операторов ИЛИ и И. Это полезно, когда нам нужно выполнить фильтрацию на основе нескольких условий, которые могут быть объединены с использованием операторов ИЛИ и И.
+
+У них так же можно испольовать операторы: `~`, `&`, `|`
+
+- `~` - НЕ
+- `&` - И
+- `|` - ИЛИ
+
+```python
+posts_with_python_or_django = Post.objects.filter(
+    Q(tags__name='Python') | Q(tags__name='Django')
+)
+
+from datetime import datetime
+category_web_dev = Category.objects.get(name='Веб-разработка')
+recent_posts_in_web_dev = Post.objects.filter(
+    Q(category=category_web_dev) & 
+    Q(published_date__gt=datetime(2023, 1, 1))
+)
+```
