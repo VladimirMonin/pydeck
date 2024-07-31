@@ -24,3 +24,11 @@ span > i.bi {
   font-size: 1.5rem;
   color: #343a40;
 }
+
+/* Внутри  <span class="tag badge"> <a href=" ... сделать белым шрфит */
+span.tag > a {
+  color: #fff;
+  /* Выключить подчеркивание текста ссылок */
+  text-decoration: none;
+}
+
