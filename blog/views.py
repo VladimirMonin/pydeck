@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from .models import Post
 from django.shortcuts import get_object_or_404
-from django.db.models import F
+from django.db.models import F, Prefetch
+
 
 USERS_COUNT = 10
 
@@ -41,8 +42,15 @@ def blog_catalog(request):
     
     if request.method == "GET":
 
-        posts = Post.objects.all()
-        # TODO: Добавить обработку поисковой формы
+        # Просто но не оптимально
+        # posts = Post.objects.all()
+        
+        # prefetch_related - позволяет сделать запрос к связанным объектам
+        # perfetch_relates - используется для многих ко многим и многих к одному
+        posts = Post.objects.prefetch_related("tags", "category").all()
+        # select_related - позволяет сделать запрос к связанным объектам
+        # select_related - используется для одного к одному и одного ко многим
+        # posts = Post.objects.select_related("category").all()
 
         context = {
             "menu": menu,
@@ -68,7 +76,11 @@ def index(request: HttpRequest):
 
 
 def post_detail(request, slug):
-    post: Post = get_object_or_404(Post, slug=slug)
+    # post: Post = get_object_or_404(Post, slug=slug)
+
+    # prefetch_related - позволяет сделать запрос к связанным объектам
+
+    post = Post.objects.prefetch_related("tags", "category").get(slug=slug)
 
     context = {
         "menu": menu,
