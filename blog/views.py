@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from .models import Post
 from django.db.models import F, Q
-
+from django.contrib.auth import get_user_model
+from django.views.decorators.cache import cache_page
 
 USERS_COUNT = 10
 
@@ -13,13 +14,17 @@ menu = [
     {"name": "О проекте", "alias": "about"},
 ]
 
-
+@cache_page(30)  # Кэширует страницу на 30 секунд
 def about(request):
     """
     Вьюшка для страницы "О проекте"
     """
+    
+    user_model = get_user_model()
+    users_count = user_model.objects.count()
+    
     context = {
-        "users_count": USERS_COUNT,
+        "users_count": users_count,
         "menu": menu,
         "page_alias": "about",
     }
