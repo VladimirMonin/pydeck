@@ -40,14 +40,14 @@ def blog_catalog(request):
     """
     
     if request.method == "GET":
-        posts = Post.objects.prefetch_related("tags", "category").all()
+        posts = Post.objects.prefetch_related("tags", "category").all().order_by("-published_date")
         search = request.GET.get("search")
         
         # Если что-то есть в поиске, есть смысл его обрабатывать
         if search:
-            search_in_title = request.GET.get("searchInTitle")
-            search_in_text = request.GET.get("searchInText")
-            search_in_tags = request.GET.get("searchInTags")
+            search_in_title = request.GET.get("search_in_title")
+            search_in_text = request.GET.get("search_in_text")
+            search_in_tags = request.GET.get("search_in_tags")
 
             # Формируем Q объект, который будем наполнять по мере активации чекбоксов
             query = Q()
@@ -66,7 +66,7 @@ def blog_catalog(request):
             if not search_in_title and not search_in_text and not search_in_tags:
                 query = Q(text__icontains=search)
 
-
+            # Сортировка по дате публикации
             posts = posts.filter(query)
         
 
