@@ -1,8 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpRequest
 from .models import Post
-from django.shortcuts import get_object_or_404
-from django.db.models import F, Prefetch
+from django.db.models import F, Q
 
 
 USERS_COUNT = 10
@@ -41,16 +40,35 @@ def blog_catalog(request):
     """
     
     if request.method == "GET":
-
-        # Просто но не оптимально
-        # posts = Post.objects.all()
-        
-        # prefetch_related - позволяет сделать запрос к связанным объектам
-        # perfetch_relates - используется для многих ко многим и многих к одному
         posts = Post.objects.prefetch_related("tags", "category").all()
-        # select_related - позволяет сделать запрос к связанным объектам
-        # select_related - используется для одного к одному и одного ко многим
-        # posts = Post.objects.select_related("category").all()
+        search = request.GET.get("search")
+        
+        # Если что-то есть в поиске, есть смысл его обрабатывать
+        if search:
+            search_in_title = request.GET.get("searchInTitle")
+            search_in_text = request.GET.get("searchInText")
+            search_in_tags = request.GET.get("searchInTags")
+
+            # Формируем Q объект, который будем наполнять по мере активации чекбоксов
+            query = Q()
+
+            # Обработка чекбокса поиска в заголовке
+            if search_in_title:
+                query |= Q(title__icontains=search)
+            # Обработка чекбокса поиска в тексте
+            if search_in_text:
+                query |= Q(text__icontains=search)
+            # Обработка чекбокса поиска в тегах
+            if search_in_tags:
+                query |= Q(tags__name__icontains=search)
+
+            # Если чекбоксы не активированы, ищем только по тексту поста
+            if not search_in_title and not search_in_text and not search_in_tags:
+                query = Q(text__icontains=search)
+
+
+            posts = posts.filter(query)
+        
 
         context = {
             "menu": menu,
